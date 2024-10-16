@@ -8,6 +8,7 @@ import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.game.entities.weapons.Bullet;
+import dev.therealdan.stickmen.game.entities.weapons.Pistol;
 import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -31,12 +32,20 @@ public class GameInstance {
         for (Entity entity : getEntities()) {
             if (!entity.ignoreGravity()) entity.getVelocity().add(0, -30f * delta);
 
+            if (entity instanceof Stickman && !(entity instanceof Player)) {
+                Stickman stickman = (Stickman) entity;
+                if (stickman.getEquipped() == null) stickman.setEquipped(new Pistol(new Vector2()));
+                stickman.shoot(this);
+            }
+
             if (entity instanceof Blood) {
-                if (System.currentTimeMillis() - ((Blood) entity).getStart() > ((Blood) entity).getLifetime()) {
+                Blood blood = (Blood) entity;
+                if (System.currentTimeMillis() - blood.getStart() > blood.getLifetime()) {
                     entities.remove(entity);
                 }
             } else if (entity instanceof Bullet) {
-                if (entity.getVelocity().len() <= 20 || System.currentTimeMillis() - ((Bullet) entity).getStart() > 10000) {
+                Bullet bullet = (Bullet) entity;
+                if (entity.getVelocity().len() <= 20 || System.currentTimeMillis() - bullet.getStart() > bullet.getLifetime()) {
                     entities.remove(entity);
                 }
             } else if (entity instanceof Player) {

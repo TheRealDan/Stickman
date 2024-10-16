@@ -1,20 +1,13 @@
 package dev.therealdan.stickmen.game.entities;
 
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import dev.therealdan.stickmen.game.GameInstance;
-import dev.therealdan.stickmen.game.entities.weapons.Bullet;
-import dev.therealdan.stickmen.game.entities.weapons.Weapon;
-import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Player extends Stickman {
 
     private int index;
 
     private Vector2 movement = new Vector2();
-    private Vector2 direction = new Vector2();
     private boolean canJump = true;
 
     public Player(Controller controller, Vector2 position) {
@@ -22,30 +15,9 @@ public class Player extends Stickman {
         index = controller.getPlayerIndex();
     }
 
-    @Override
-    public void render(StickmenApp app) {
-        super.render(app);
-
-        if (getEquipped() != null) {
-            Weapon weapon = getEquipped();
-            app.batch.setColor(Color.BLACK);
-            app.batch.draw(new TextureRegion(weapon.getTexture()), getPosition().x - weapon.getWidth() / 2f + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y - weapon.getHeight() / 2f + getHeight() / 2f, weapon.getWidth() / 2f, weapon.getHeight() / 2f, weapon.getWidth(), weapon.getHeight(), 1, getDirection().y > 0 ? -1 : 1, (float) (Math.atan2(getDirection().y, getDirection().x) * 180 / Math.PI + 450));
-        }
-    }
-
     public void jump() {
         getVelocity().set(getVelocity().x, 15f);
         setCanJump(false);
-    }
-
-    public void shoot(GameInstance instance) {
-        Weapon weapon = getEquipped();
-        if (System.currentTimeMillis() - weapon.getLastShot() < weapon.getReload()) return;
-        weapon.setLastShot();
-
-        Bullet bullet = new Bullet(this, new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
-        bullet.getVelocity().set(getDirection().y, -getDirection().x).nor().scl(25);
-        instance.spawnEntity(bullet);
     }
 
     public void setCanJump(boolean canJump) {
@@ -74,10 +46,6 @@ public class Player extends Stickman {
 
     public Vector2 getMovement() {
         return movement;
-    }
-
-    public Vector2 getDirection() {
-        return direction;
     }
 
     public boolean canJump() {

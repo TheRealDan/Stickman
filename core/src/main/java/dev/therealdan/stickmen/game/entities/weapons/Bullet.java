@@ -29,6 +29,10 @@ public class Bullet extends Entity {
         return owner;
     }
 
+    public long getLifetime() {
+        return 5000;
+    }
+
     public long getStart() {
         return start;
     }

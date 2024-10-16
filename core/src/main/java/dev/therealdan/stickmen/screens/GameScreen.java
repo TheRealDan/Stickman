@@ -25,9 +25,6 @@ public class GameScreen extends BaseScreen {
     public GameScreen(StickmenApp app) {
         super(app);
         instance = new GameInstance();
-
-        for (Controller controller : Controllers.getControllers())
-            connected(controller);
     }
 
     @Override
@@ -71,14 +68,6 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    @Override
-    public void connected(Controller controller) {
-        if (getInstance().getPlayer(controller) == null) {
-            Player player = new Player(controller, new Vector2(camera.position.x, camera.position.y));
-            getInstance().spawnEntity(player);
-        }
-    }
-
     public GameInstance getInstance() {
         return instance;
     }
@@ -99,6 +88,17 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         camera.zoom = Math.max(0.5f, camera.zoom + amountY / 10f);
+        return false;
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int i) {
+        Player player = getInstance().getPlayer(controller);
+        if (player == null) {
+            player = new Player(controller, new Vector2(camera.position.x, camera.position.y));
+            getInstance().spawnEntity(player);
+        }
+
         return false;
     }
 
