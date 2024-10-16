@@ -78,6 +78,12 @@ public class GameInstance {
                 if (each.equals(entity)) continue;
                 if (entity instanceof Stickman) {
                     Stickman stickman = (Stickman) entity;
+                    if (stickman.getHealth() <= 0) {
+                        entities.remove(stickman);
+                        Blood.effect(this, random, stickman.getPosition().cpy().add(0, stickman.getHeight() / 2f), 50, 2 + random.nextInt(6) + random.nextInt(6));
+                        continue;
+                    }
+
                     if (each instanceof Weapon) {
                         if (stickman.contains(each.getPosition())) {
                             stickman.setEquipped((Weapon) each);
@@ -88,12 +94,7 @@ public class GameInstance {
                         if (!bullet.getOwner().equals(entity) && stickman.contains(bullet.getPosition())) {
                             stickman.setHealth(Math.max(0, stickman.getHealth() - 5));
                             entities.remove(bullet);
-
-                            for (int i = 0; i <= random.nextInt(5); i++) {
-                                Blood blood = new Blood(bullet.getPosition().cpy(), 2 + random.nextInt(6) + random.nextInt(6));
-                                blood.getVelocity().set((random.nextBoolean() ? 1 : -1) * random.nextInt(5), random.nextInt(5));
-                                spawnEntity(blood);
-                            }
+                            Blood.effect(this, random, bullet.getPosition().cpy(), 1 + random.nextInt(4), 2 + random.nextInt(6) + random.nextInt(6));
                         }
                     }
                 }

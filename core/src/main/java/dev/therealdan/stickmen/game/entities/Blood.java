@@ -3,7 +3,10 @@ package dev.therealdan.stickmen.game.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.GameInstance;
 import dev.therealdan.stickmen.main.StickmenApp;
+
+import java.util.Random;
 
 public class Blood extends Entity {
 
@@ -15,6 +18,14 @@ public class Blood extends Entity {
     public Blood(Vector2 position, float size) {
         super(position);
         this.size = size;
+    }
+
+    public static void effect(GameInstance instance, Random random, Vector2 position, int count, float size) {
+        for (int i = 0; i < count; i++) {
+            Blood blood = new Blood(position.cpy(), size);
+            blood.getVelocity().set((random.nextBoolean() ? 1 : -1) * random.nextInt(5), random.nextInt(5));
+            instance.spawnEntity(blood);
+        }
     }
 
     @Override
