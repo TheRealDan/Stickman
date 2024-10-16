@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public abstract class BaseScreen implements Screen, InputProcessor, ControllerListener {
@@ -66,6 +67,10 @@ public abstract class BaseScreen implements Screen, InputProcessor, ControllerLi
 
     @Override
     public void disconnected(Controller controller) {
+    }
+
+    public boolean isOnScreen(Entity entity) {
+        return entity.within(getPosition(0, 0), getPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
     public boolean containsMouse(float x, float y, float width, float height) {

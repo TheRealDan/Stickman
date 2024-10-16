@@ -61,6 +61,9 @@ public class GameScreen extends BaseScreen {
 
         for (Entity entity : getInstance().getEntities()) {
             entity.render(app);
+
+            if (entity instanceof Player && !isOnScreen(entity))
+                entity.getPosition().set(camera.position.x, camera.position.y);
         }
     }
 
