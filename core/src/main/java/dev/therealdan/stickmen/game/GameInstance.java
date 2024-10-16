@@ -29,6 +29,7 @@ public class GameInstance {
     }
 
     public void tick(float delta) {
+        entity:
         for (Entity entity : getEntities()) {
             if (!entity.ignoreGravity()) entity.getVelocity().add(0, -30f * delta);
 
@@ -90,7 +91,7 @@ public class GameInstance {
                     if (stickman.getHealth() <= 0) {
                         entities.remove(stickman);
                         Blood.effect(this, random, stickman.getPosition().cpy().add(0, stickman.getHeight() / 2f), 50, 2 + random.nextInt(6) + random.nextInt(6));
-                        continue;
+                        continue entity;
                     }
 
                     if (each instanceof Weapon) {
