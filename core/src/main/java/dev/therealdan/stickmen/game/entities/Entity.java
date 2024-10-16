@@ -20,6 +20,10 @@ public abstract class Entity {
         app.batch.draw(getTexture(), getPosition().x - getWidth() / 2f, getPosition().y, getWidth(), getHeight());
     }
 
+    public boolean ignoreGravity() {
+        return false;
+    }
+
     public boolean contains(Vector2 point) {
         return getPosition().x - getWidth() / 2f < point.x && point.x < getPosition().x + getWidth() + 2f &&
             getPosition().y - getHeight() / 2f < point.y && point.y < getPosition().y + getHeight() + 2f;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.GameInstance;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Player extends Stickman {
@@ -35,6 +36,17 @@ public class Player extends Stickman {
     public void jump() {
         getVelocity().set(getVelocity().x, 15f);
         setCanJump(false);
+    }
+
+    public void shoot(GameInstance instance) {
+        if (!(getEquipped() instanceof AssaultRifle)) return;
+        AssaultRifle assaultRifle = (AssaultRifle) getEquipped();
+        if (System.currentTimeMillis() - assaultRifle.getLastShot() < assaultRifle.getReload()) return;
+        assaultRifle.setLastShot();
+
+        Bullet bullet = new Bullet(new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
+        bullet.getVelocity().set(getDirection().y, -getDirection().x).nor().scl(25);
+        instance.spawnEntity(bullet);
     }
 
     public void setCanJump(boolean canJump) {

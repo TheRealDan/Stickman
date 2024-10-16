@@ -4,6 +4,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.entities.AssaultRifle;
+import dev.therealdan.stickmen.game.entities.Bullet;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 
@@ -22,7 +23,13 @@ public class GameInstance {
 
     public void tick(float delta) {
         for (Entity entity : getEntities()) {
-            entity.getVelocity().add(0, -30f * delta);
+            if (!entity.ignoreGravity()) entity.getVelocity().add(0, -30f * delta);
+
+            if (entity instanceof Bullet) {
+                if (entity.getVelocity().len() == 0) {
+                    entities.remove(entity);
+                }
+            }
 
             for (Platform platform : getPlatforms()) {
                 if (platform.getPosition().x - platform.getWidth() / 2f > entity.getPosition().x + entity.getWidth() / 2f) continue;

@@ -7,8 +7,23 @@ public class AssaultRifle extends Entity {
 
     private static Texture texture;
 
+    private long reload = 50;
+    private long lastShot = System.currentTimeMillis();
+
     public AssaultRifle(Vector2 position) {
         super(position);
+    }
+
+    public void setLastShot() {
+        this.lastShot = System.currentTimeMillis();
+    }
+
+    public long getReload() {
+        return reload;
+    }
+
+    public long getLastShot() {
+        return lastShot;
     }
 
     @Override

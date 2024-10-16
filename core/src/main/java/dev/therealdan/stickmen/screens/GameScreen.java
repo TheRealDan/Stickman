@@ -49,6 +49,10 @@ public class GameScreen extends BaseScreen {
             if (player.canJump())
                 if (controller.getButton(9) || controller.getButton(0))
                     player.jump();
+
+            if (player.getEquipped() != null)
+                if (controller.getAxis(5) > 0.2f)
+                    player.shoot(getInstance());
         }
 
         for (Platform platform : getInstance().getPlatforms()) {
@@ -59,8 +63,6 @@ public class GameScreen extends BaseScreen {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
                 player.getPosition().add(player.getMovement().x * 750f * delta, 0);
-
-                app.font.center(app.batch, camera, player.getDirection().x + " " + player.getDirection().y, player.getPosition().x, player.getPosition().y + player.getHeight() + 30, 16, Color.BLACK);
             }
             entity.render(app);
         }
