@@ -1,8 +1,10 @@
 package dev.therealdan.stickmen.game;
 
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.entities.Entity;
-import dev.therealdan.stickmen.game.entities.Stickman;
+import dev.therealdan.stickmen.game.entities.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,12 +13,55 @@ import java.util.List;
 public class GameInstance {
 
     private HashSet<Entity> entities = new HashSet<>();
+    private HashSet<Platform> platforms = new HashSet<>();
 
     public GameInstance() {
-        entities.add(new Stickman(new Vector2()));
+        spawnPlatform(new Platform(new Vector2(0, -50), 500, 50, Color.BLACK));
+    }
+
+    public void tick(float delta) {
+        for (Entity entity : getEntities()) {
+            entity.getVelocity().add(0, -10f * delta);
+
+            for (Platform platform : getPlatforms()) {
+                if (platform.getPosition().x - platform.getWidth() / 2f > entity.getPosition().x + entity.getWidth() / 2f) continue;
+                if (platform.getPosition().x + platform.getWidth() / 2f < entity.getPosition().x - entity.getWidth() / 2f) continue;
+
+                if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) {
+                    if (platform.getPosition().y + platform.getHeight() / 2f > entity.getPosition().y + entity.getVelocity().y * 100f * delta) {
+                        if (Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)) > 100) {
+                            entity.getPosition().set(entity.getPosition().x, entity.getPosition().y - Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)));
+                        }
+                        entity.getVelocity().set(0, 0);
+                    }
+                }
+            }
+
+            entity.getPosition().add(entity.getVelocity().x * 100f * delta, entity.getVelocity().y * 100f * delta);
+        }
+    }
+
+    public void spawnPlayer(Player player) {
+        entities.add(player);
+    }
+
+    public void spawnPlatform(Platform platform) {
+        platforms.add(platform);
+    }
+
+    public Player getPlayer(Controller controller) {
+        for (Entity entity : getEntities())
+            if (entity instanceof Player)
+                if (controller.getPlayerIndex() == ((Player) entity).getIndex())
+                    return (Player) entity;
+        return null;
     }
 
     public List<Entity> getEntities() {
         return new ArrayList<>(entities);
+    }
+
+    public List<Platform> getPlatforms() {
+        return new ArrayList<>(platforms);
     }
 }

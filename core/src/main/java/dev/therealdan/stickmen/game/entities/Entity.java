@@ -8,9 +8,11 @@ import dev.therealdan.stickmen.main.StickmenApp;
 public abstract class Entity {
 
     private Vector2 position;
+    private Vector2 velocity;
 
     public Entity(Vector2 position) {
         this.position = position;
+        this.velocity = new Vector2();
     }
 
     public void render(StickmenApp app) {
@@ -32,5 +34,9 @@ public abstract class Entity {
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 }

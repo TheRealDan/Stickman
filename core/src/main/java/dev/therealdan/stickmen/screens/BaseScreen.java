@@ -3,6 +3,9 @@ package dev.therealdan.stickmen.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -10,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.therealdan.stickmen.main.StickmenApp;
 
-public abstract class BaseScreen implements Screen, InputProcessor {
+public abstract class BaseScreen implements Screen, InputProcessor, ControllerListener {
 
     protected StickmenApp app;
 
@@ -21,6 +24,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         this.app = app;
         camera = new OrthographicCamera();
         viewport = new ScreenViewport(camera);
+        Controllers.addListener(this);
     }
 
     @Override
@@ -54,6 +58,14 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public void connected(Controller controller) {
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
     }
 
     public boolean containsMouse(float x, float y, float width, float height) {
@@ -122,6 +134,21 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int i) {
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int i) {
+        return false;
+    }
+
+    @Override
+    public boolean axisMoved(Controller controller, int i, float v) {
         return false;
     }
 }
