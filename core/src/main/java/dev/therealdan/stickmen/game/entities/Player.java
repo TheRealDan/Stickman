@@ -17,7 +17,7 @@ public class Player extends Stickman {
     }
 
     public void jump() {
-        getVelocity().set(getVelocity().x, 8f);
+        getVelocity().set(getVelocity().x, 15f);
         setCanJump(false);
     }
 

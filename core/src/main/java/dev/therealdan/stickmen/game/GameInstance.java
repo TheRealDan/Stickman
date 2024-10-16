@@ -21,7 +21,7 @@ public class GameInstance {
 
     public void tick(float delta) {
         for (Entity entity : getEntities()) {
-            entity.getVelocity().add(0, -10f * delta);
+            entity.getVelocity().add(0, -30f * delta);
 
             for (Platform platform : getPlatforms()) {
                 if (platform.getPosition().x - platform.getWidth() / 2f > entity.getPosition().x + entity.getWidth() / 2f) continue;
