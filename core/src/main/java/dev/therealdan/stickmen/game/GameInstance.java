@@ -3,6 +3,7 @@ package dev.therealdan.stickmen.game;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.entities.Blood;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
@@ -12,21 +13,29 @@ import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class GameInstance {
+
+    private Random random = new Random();
 
     private HashSet<Entity> entities = new HashSet<>();
     private HashSet<Platform> platforms = new HashSet<>();
 
     public GameInstance() {
-        spawnPlatform(new Platform(new Vector2(0, -50), 500, 50, Color.BLACK));
+        spawnPlatform(new Platform(new Vector2(0, -50), 1000, 50, Color.BLACK));
+        spawnEntity(new Stickman(new Vector2()));
     }
 
     public void tick(float delta) {
         for (Entity entity : getEntities()) {
             if (!entity.ignoreGravity()) entity.getVelocity().add(0, -30f * delta);
 
-            if (entity instanceof Bullet) {
+            if (entity instanceof Blood) {
+                if (System.currentTimeMillis() - ((Blood) entity).getStart() > ((Blood) entity).getLifetime()) {
+                    entities.remove(entity);
+                }
+            } else if (entity instanceof Bullet) {
                 if (entity.getVelocity().len() <= 20 || System.currentTimeMillis() - ((Bullet) entity).getStart() > 10000) {
                     entities.remove(entity);
                 }
@@ -40,14 +49,14 @@ public class GameInstance {
                     if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) continue;
                     if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) continue;
                     if (platform.getPosition().x - platform.getWidth() / 2f < entity.getPosition().x + entity.getWidth() / 2f + entity.getVelocity().x * 100f * delta)
-                        entity.getVelocity().set(0, entity.getVelocity().y);
+                        entity.getVelocity().set(0, entity.getVelocity().y * entity.getFriction());
                     continue;
                 }
                 if (platform.getPosition().x + platform.getWidth() / 2f < entity.getPosition().x - entity.getWidth() / 2f) {
                     if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) continue;
                     if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) continue;
                     if (platform.getPosition().x + platform.getWidth() / 2f > entity.getPosition().x - entity.getWidth() / 2f + entity.getVelocity().x * 100f * delta)
-                        entity.getVelocity().set(0, entity.getVelocity().y);
+                        entity.getVelocity().set(0, entity.getVelocity().y * entity.getFriction());
                     continue;
                 }
 
@@ -56,11 +65,11 @@ public class GameInstance {
                         if (entity instanceof Player) ((Player) entity).setCanJump(true);
                         if (Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)) > 100)
                             entity.getPosition().set(entity.getPosition().x, entity.getPosition().y - Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)));
-                        entity.getVelocity().set(entity.getVelocity().x, 0);
+                        entity.getVelocity().set(entity.getVelocity().x * entity.getFriction(), 0);
                     }
                 } else if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) {
                     if (platform.getPosition().y - platform.getHeight() / 2f < entity.getPosition().y + entity.getHeight() + entity.getVelocity().y * 100f * delta) {
-                        entity.getVelocity().set(entity.getVelocity().x, 0);
+                        entity.getVelocity().set(entity.getVelocity().x * entity.getFriction(), 0);
                     }
                 }
             }
@@ -79,6 +88,12 @@ public class GameInstance {
                         if (!bullet.getOwner().equals(entity) && stickman.contains(bullet.getPosition())) {
                             stickman.setHealth(Math.max(0, stickman.getHealth() - 5));
                             entities.remove(bullet);
+
+                            for (int i = 0; i <= random.nextInt(5); i++) {
+                                Blood blood = new Blood(bullet.getPosition().cpy(), 2 + random.nextInt(6) + random.nextInt(6));
+                                blood.getVelocity().set((random.nextBoolean() ? 1 : -1) * random.nextInt(5), random.nextInt(5));
+                                spawnEntity(blood);
+                            }
                         }
                     }
                 }

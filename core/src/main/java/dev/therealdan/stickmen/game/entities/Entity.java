@@ -24,6 +24,10 @@ public abstract class Entity {
         return false;
     }
 
+    public float getFriction() {
+        return 1;
+    }
+
     public boolean contains(Vector2 point) {
         return getPosition().x - getWidth() / 2f < point.x && point.x < getPosition().x + getWidth() + 2f &&
             getPosition().y - getHeight() / 2f < point.y && point.y < getPosition().y + getHeight() + 2f;
