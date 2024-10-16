@@ -41,6 +41,15 @@ public class GameScreen extends BaseScreen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || (Gdx.input.isKeyPressed(Input.Keys.D)))
             camera.position.add(new Vector3(speed * delta, 0, 0));
 
+        for (Controller controller : Controllers.getControllers()) {
+            Player player = getInstance().getPlayer(controller);
+            if (player == null) continue;
+
+            if (player.canJump())
+                if (controller.getButton(9) || controller.getButton(0))
+                    player.jump();
+        }
+
         for (Platform platform : getInstance().getPlatforms()) {
             platform.render(app);
         }
@@ -75,20 +84,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         camera.zoom = Math.max(0.5f, camera.zoom + amountY / 10f);
-        return false;
-    }
-
-    @Override
-    public boolean buttonDown(Controller controller, int i) {
-        Player player = getInstance().getPlayer(controller);
-        if (player == null) return false;
-        switch (i) {
-            default:
-                System.out.println(i);
-            case 0:
-            case 9:
-                player.jump();
-        }
         return false;
     }
 

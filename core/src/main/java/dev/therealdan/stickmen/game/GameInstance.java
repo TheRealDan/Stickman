@@ -29,6 +29,7 @@ public class GameInstance {
 
                 if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) {
                     if (platform.getPosition().y + platform.getHeight() / 2f > entity.getPosition().y + entity.getVelocity().y * 100f * delta) {
+                        if (entity instanceof Player) ((Player) entity).setCanJump(true);
                         if (Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)) > 100) {
                             entity.getPosition().set(entity.getPosition().x, entity.getPosition().y - Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)));
                         }

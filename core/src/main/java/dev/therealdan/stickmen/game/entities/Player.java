@@ -9,6 +9,8 @@ public class Player extends Stickman {
 
     private Vector2 movement = new Vector2();
 
+    private boolean canJump = true;
+
     public Player(Controller controller, Vector2 position) {
         super(position);
         index = controller.getPlayerIndex();
@@ -16,6 +18,11 @@ public class Player extends Stickman {
 
     public void jump() {
         getVelocity().set(getVelocity().x, 8f);
+        setCanJump(false);
+    }
+
+    public void setCanJump(boolean canJump) {
+        this.canJump = canJump;
     }
 
     public void axisMoved(Controller controller, int i, float v) {
@@ -31,5 +38,9 @@ public class Player extends Stickman {
 
     public Vector2 getMovement() {
         return movement;
+    }
+
+    public boolean canJump() {
+        return canJump;
     }
 }
