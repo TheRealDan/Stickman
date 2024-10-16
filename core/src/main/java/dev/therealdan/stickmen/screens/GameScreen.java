@@ -9,13 +9,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import dev.therealdan.stickmen.game.GameInstance;
 import dev.therealdan.stickmen.game.Platform;
-import dev.therealdan.stickmen.game.entities.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
+import dev.therealdan.stickmen.game.entities.weapons.AssaultRifle;
+import dev.therealdan.stickmen.game.entities.weapons.Pistol;
 import dev.therealdan.stickmen.main.StickmenApp;
+
+import java.util.Random;
 
 public class GameScreen extends BaseScreen {
 
+    private Random random = new Random();
     private GameInstance instance;
 
     public GameScreen(StickmenApp app) {
@@ -86,7 +90,7 @@ public class GameScreen extends BaseScreen {
                 getInstance().spawnPlatform(new Platform(getMousePosition(), 500, 50, Color.BLUE));
                 break;
             case 1:
-                getInstance().spawnEntity(new AssaultRifle(getMousePosition()));
+                getInstance().spawnEntity(random.nextBoolean() ? new Pistol(getMousePosition()) : new AssaultRifle(getMousePosition()));
                 break;
         }
         return false;

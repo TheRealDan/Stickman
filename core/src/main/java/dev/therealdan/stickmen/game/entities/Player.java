@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.GameInstance;
+import dev.therealdan.stickmen.game.entities.weapons.Bullet;
+import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Player extends Stickman {
@@ -15,7 +17,7 @@ public class Player extends Stickman {
     private Vector2 direction = new Vector2();
     private boolean canJump = true;
 
-    private Entity equipped;
+    private Weapon equipped;
 
     public Player(Controller controller, Vector2 position) {
         super(position);
@@ -26,10 +28,10 @@ public class Player extends Stickman {
     public void render(StickmenApp app) {
         super.render(app);
 
-        if (getEquipped() != null && getEquipped() instanceof AssaultRifle) {
-            AssaultRifle assaultRifle = (AssaultRifle) getEquipped();
+        if (getEquipped() != null) {
+            Weapon weapon = getEquipped();
             app.batch.setColor(Color.BLACK);
-            app.batch.draw(new TextureRegion(assaultRifle.getTexture()), getPosition().x - assaultRifle.getWidth() / 2f + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y - assaultRifle.getHeight() / 2f + getHeight() / 2f, assaultRifle.getWidth() / 2f, assaultRifle.getHeight() / 2f, assaultRifle.getWidth(), assaultRifle.getHeight(), 1, getDirection().y > 0 ? -1 : 1, (float) (Math.atan2(getDirection().y, getDirection().x) * 180 / Math.PI + 450));
+            app.batch.draw(new TextureRegion(weapon.getTexture()), getPosition().x - weapon.getWidth() / 2f + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y - weapon.getHeight() / 2f + getHeight() / 2f, weapon.getWidth() / 2f, weapon.getHeight() / 2f, weapon.getWidth(), weapon.getHeight(), 1, getDirection().y > 0 ? -1 : 1, (float) (Math.atan2(getDirection().y, getDirection().x) * 180 / Math.PI + 450));
         }
     }
 
@@ -39,10 +41,9 @@ public class Player extends Stickman {
     }
 
     public void shoot(GameInstance instance) {
-        if (!(getEquipped() instanceof AssaultRifle)) return;
-        AssaultRifle assaultRifle = (AssaultRifle) getEquipped();
-        if (System.currentTimeMillis() - assaultRifle.getLastShot() < assaultRifle.getReload()) return;
-        assaultRifle.setLastShot();
+        Weapon weapon = getEquipped();
+        if (System.currentTimeMillis() - weapon.getLastShot() < weapon.getReload()) return;
+        weapon.setLastShot();
 
         Bullet bullet = new Bullet(new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
         bullet.getVelocity().set(getDirection().y, -getDirection().x).nor().scl(25);
@@ -53,8 +54,8 @@ public class Player extends Stickman {
         this.canJump = canJump;
     }
 
-    public void setEquipped(Entity equipped) {
-        this.equipped = equipped;
+    public void setEquipped(Weapon weapon) {
+        this.equipped = weapon;
     }
 
     public void axisMoved(Controller controller, int i, float v) {
@@ -89,7 +90,7 @@ public class Player extends Stickman {
         return canJump;
     }
 
-    public Entity getEquipped() {
+    public Weapon getEquipped() {
         return equipped;
     }
 }

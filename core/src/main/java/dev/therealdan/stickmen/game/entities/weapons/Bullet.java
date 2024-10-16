@@ -1,8 +1,9 @@
-package dev.therealdan.stickmen.game.entities;
+package dev.therealdan.stickmen.game.entities.weapons;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Bullet extends Entity {

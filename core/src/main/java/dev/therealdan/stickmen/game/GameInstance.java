@@ -3,10 +3,10 @@ package dev.therealdan.stickmen.game;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import dev.therealdan.stickmen.game.entities.AssaultRifle;
-import dev.therealdan.stickmen.game.entities.Bullet;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
+import dev.therealdan.stickmen.game.entities.weapons.Bullet;
+import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -66,9 +66,9 @@ public class GameInstance {
 
             for (Entity each : getEntities()) {
                 if (each.equals(entity)) continue;
-                if (each instanceof AssaultRifle && entity instanceof Player) {
+                if (each instanceof Weapon && entity instanceof Player) {
                     if (entity.contains(each.getPosition())) {
-                        ((Player) entity).setEquipped(each);
+                        ((Player) entity).setEquipped((Weapon) each);
                         entities.remove(each);
                     }
                 }
