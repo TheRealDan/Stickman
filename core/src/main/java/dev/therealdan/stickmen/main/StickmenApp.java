@@ -3,6 +3,7 @@ package dev.therealdan.stickmen.main;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import dev.therealdan.stickmen.screens.GameScreen;
@@ -13,10 +14,13 @@ public class StickmenApp extends Game {
 
     public SpriteBatch batch;
 
+    public Texture texture;
+
     @Override
     public void create() {
         font = new FontManager();
         batch = new SpriteBatch();
+        texture = new Texture("blank.png");
 
         setScreen(new GameScreen(this));
     }
