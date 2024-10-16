@@ -26,7 +26,7 @@ public class GameInstance {
             if (!entity.ignoreGravity()) entity.getVelocity().add(0, -30f * delta);
 
             if (entity instanceof Bullet) {
-                if (entity.getVelocity().len() == 0) {
+                if (entity.getVelocity().len() == 0 || System.currentTimeMillis() - ((Bullet) entity).getStart() > 10000) {
                     entities.remove(entity);
                 }
             } else if (entity instanceof Player) {

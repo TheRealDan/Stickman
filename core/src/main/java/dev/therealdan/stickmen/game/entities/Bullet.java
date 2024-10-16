@@ -9,6 +9,8 @@ public class Bullet extends Entity {
 
     private static Texture texture;
 
+    private long start = System.currentTimeMillis();
+
     public Bullet(Vector2 position) {
         super(position);
     }
@@ -17,6 +19,10 @@ public class Bullet extends Entity {
     public void render(StickmenApp app) {
         app.batch.setColor(Color.BLACK);
         app.batch.draw(getTexture(), getPosition().x - getWidth() / 2f, getPosition().y, getWidth(), getHeight());
+    }
+
+    public long getStart() {
+        return start;
     }
 
     @Override
