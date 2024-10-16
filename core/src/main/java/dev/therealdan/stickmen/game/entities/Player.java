@@ -17,8 +17,6 @@ public class Player extends Stickman {
     private Vector2 direction = new Vector2();
     private boolean canJump = true;
 
-    private Weapon equipped;
-
     public Player(Controller controller, Vector2 position) {
         super(position);
         index = controller.getPlayerIndex();
@@ -45,17 +43,13 @@ public class Player extends Stickman {
         if (System.currentTimeMillis() - weapon.getLastShot() < weapon.getReload()) return;
         weapon.setLastShot();
 
-        Bullet bullet = new Bullet(new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
+        Bullet bullet = new Bullet(this, new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
         bullet.getVelocity().set(getDirection().y, -getDirection().x).nor().scl(25);
         instance.spawnEntity(bullet);
     }
 
     public void setCanJump(boolean canJump) {
         this.canJump = canJump;
-    }
-
-    public void setEquipped(Weapon weapon) {
-        this.equipped = weapon;
     }
 
     public void axisMoved(Controller controller, int i, float v) {
@@ -90,7 +84,4 @@ public class Player extends Stickman {
         return canJump;
     }
 
-    public Weapon getEquipped() {
-        return equipped;
-    }
 }

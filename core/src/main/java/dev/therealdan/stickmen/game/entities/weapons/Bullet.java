@@ -4,22 +4,29 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.entities.Entity;
+import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Bullet extends Entity {
 
     private static Texture texture;
 
+    private Stickman owner;
     private long start = System.currentTimeMillis();
 
-    public Bullet(Vector2 position) {
+    public Bullet(Stickman owner, Vector2 position) {
         super(position);
+        this.owner = owner;
     }
 
     @Override
     public void render(StickmenApp app) {
         app.batch.setColor(Color.BLACK);
         app.batch.draw(getTexture(), getPosition().x - getWidth() / 2f, getPosition().y, getWidth(), getHeight());
+    }
+
+    public Stickman getOwner() {
+        return owner;
     }
 
     public long getStart() {

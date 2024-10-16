@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
+import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.game.entities.weapons.Bullet;
 import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 
@@ -66,10 +67,19 @@ public class GameInstance {
 
             for (Entity each : getEntities()) {
                 if (each.equals(entity)) continue;
-                if (each instanceof Weapon && entity instanceof Player) {
-                    if (entity.contains(each.getPosition())) {
-                        ((Player) entity).setEquipped((Weapon) each);
-                        entities.remove(each);
+                if (entity instanceof Stickman) {
+                    Stickman stickman = (Stickman) entity;
+                    if (each instanceof Weapon) {
+                        if (stickman.contains(each.getPosition())) {
+                            stickman.setEquipped((Weapon) each);
+                            entities.remove(each);
+                        }
+                    } else if (each instanceof Bullet) {
+                        Bullet bullet = (Bullet) each;
+                        if (!bullet.getOwner().equals(entity) && stickman.contains(bullet.getPosition())) {
+                            stickman.setHealth(Math.max(0, stickman.getHealth() - 5));
+                            entities.remove(bullet);
+                        }
                     }
                 }
             }

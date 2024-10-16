@@ -3,6 +3,7 @@ package dev.therealdan.stickmen.game.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 import dev.therealdan.stickmen.main.StickmenApp;
 
 public class Stickman extends Entity {
@@ -11,6 +12,8 @@ public class Stickman extends Entity {
 
     private float maxHealth;
     private float health;
+
+    private Weapon equipped;
 
     public Stickman(Vector2 position) {
         super(position);
@@ -38,12 +41,20 @@ public class Stickman extends Entity {
         this.health = health;
     }
 
+    public void setEquipped(Weapon weapon) {
+        this.equipped = weapon;
+    }
+
     public float getMaxHealth() {
         return maxHealth;
     }
 
     public float getHealth() {
         return health;
+    }
+
+    public Weapon getEquipped() {
+        return equipped;
     }
 
     @Override
