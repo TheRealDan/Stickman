@@ -29,6 +29,11 @@ public abstract class Entity {
             getPosition().y - getHeight() / 2f < point.y && point.y < getPosition().y + getHeight() + 2f;
     }
 
+    public boolean within(Vector2 start, Vector2 end) {
+        return Math.min(start.x, end.x) < getPosition().x && getPosition().x < Math.max(start.x, end.x)
+            && Math.min(start.y, end.y) < getPosition().y && getPosition().y < Math.max(start.y, end.y);
+    }
+
     public float getWidth() {
         return 100;
     }

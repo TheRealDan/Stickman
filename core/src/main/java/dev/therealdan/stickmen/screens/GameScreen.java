@@ -60,10 +60,6 @@ public class GameScreen extends BaseScreen {
         }
 
         for (Entity entity : getInstance().getEntities()) {
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
-                player.getPosition().add(player.getMovement().x * 750f * delta, 0);
-            }
             entity.render(app);
         }
     }

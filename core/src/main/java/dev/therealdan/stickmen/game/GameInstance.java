@@ -29,19 +29,37 @@ public class GameInstance {
                 if (entity.getVelocity().len() == 0) {
                     entities.remove(entity);
                 }
+            } else if (entity instanceof Player) {
+                Player player = (Player) entity;
+                player.getVelocity().set(player.getMovement().x * 600f * delta, player.getVelocity().y);
             }
 
             for (Platform platform : getPlatforms()) {
-                if (platform.getPosition().x - platform.getWidth() / 2f > entity.getPosition().x + entity.getWidth() / 2f) continue;
-                if (platform.getPosition().x + platform.getWidth() / 2f < entity.getPosition().x - entity.getWidth() / 2f) continue;
+                if (platform.getPosition().x - platform.getWidth() / 2f > entity.getPosition().x + entity.getWidth() / 2f) {
+                    if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) continue;
+                    if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) continue;
+                    if (platform.getPosition().x - platform.getWidth() / 2f < entity.getPosition().x + entity.getWidth() / 2f + entity.getVelocity().x * 100f * delta)
+                        entity.getVelocity().set(0, entity.getVelocity().y);
+                    continue;
+                }
+                if (platform.getPosition().x + platform.getWidth() / 2f < entity.getPosition().x - entity.getWidth() / 2f) {
+                    if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) continue;
+                    if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) continue;
+                    if (platform.getPosition().x + platform.getWidth() / 2f > entity.getPosition().x - entity.getWidth() / 2f + entity.getVelocity().x * 100f * delta)
+                        entity.getVelocity().set(0, entity.getVelocity().y);
+                    continue;
+                }
 
                 if (platform.getPosition().y + platform.getHeight() / 2f < entity.getPosition().y) {
                     if (platform.getPosition().y + platform.getHeight() / 2f > entity.getPosition().y + entity.getVelocity().y * 100f * delta) {
                         if (entity instanceof Player) ((Player) entity).setCanJump(true);
-                        if (Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)) > 100) {
+                        if (Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)) > 100)
                             entity.getPosition().set(entity.getPosition().x, entity.getPosition().y - Math.abs(entity.getPosition().y - (platform.getPosition().y + platform.getHeight() / 2f)));
-                        }
-                        entity.getVelocity().set(0, 0);
+                        entity.getVelocity().set(entity.getVelocity().x, 0);
+                    }
+                } else if (platform.getPosition().y - platform.getHeight() / 2f > entity.getPosition().y + entity.getHeight()) {
+                    if (platform.getPosition().y - platform.getHeight() / 2f < entity.getPosition().y + entity.getHeight() + entity.getVelocity().y * 100f * delta) {
+                        entity.getVelocity().set(entity.getVelocity().x, 0);
                     }
                 }
             }
