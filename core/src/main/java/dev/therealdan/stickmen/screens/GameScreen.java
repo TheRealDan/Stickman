@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import dev.therealdan.stickmen.game.GameInstance;
 import dev.therealdan.stickmen.game.Platform;
+import dev.therealdan.stickmen.game.entities.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.main.StickmenApp;
@@ -58,6 +59,8 @@ public class GameScreen extends BaseScreen {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
                 player.getPosition().add(player.getMovement().x * 750f * delta, 0);
+
+                app.font.center(app.batch, camera, player.getDirection().x + " " + player.getDirection().y, player.getPosition().x, player.getPosition().y + player.getHeight() + 30, 16, Color.BLACK);
             }
             entity.render(app);
         }
@@ -67,7 +70,7 @@ public class GameScreen extends BaseScreen {
     public void connected(Controller controller) {
         if (getInstance().getPlayer(controller) == null) {
             Player player = new Player(controller, new Vector2(camera.position.x, camera.position.y));
-            getInstance().spawnPlayer(player);
+            getInstance().spawnEntity(player);
         }
     }
 
@@ -77,7 +80,14 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        getInstance().spawnPlatform(new Platform(getMousePosition(), 500, 50, Color.BLUE));
+        switch (button) {
+            case 0:
+                getInstance().spawnPlatform(new Platform(getMousePosition(), 500, 50, Color.BLUE));
+                break;
+            case 1:
+                getInstance().spawnEntity(new AssaultRifle(getMousePosition()));
+                break;
+        }
         return false;
     }
 

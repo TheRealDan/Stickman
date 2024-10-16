@@ -3,6 +3,7 @@ package dev.therealdan.stickmen.game;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.entities.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 
@@ -38,12 +39,22 @@ public class GameInstance {
                 }
             }
 
+            for (Entity each : getEntities()) {
+                if (each.equals(entity)) continue;
+                if (each instanceof AssaultRifle && entity instanceof Player) {
+                    if (entity.contains(each.getPosition())) {
+                        ((Player) entity).setEquipped(each);
+                        entities.remove(each);
+                    }
+                }
+            }
+
             entity.getPosition().add(entity.getVelocity().x * 100f * delta, entity.getVelocity().y * 100f * delta);
         }
     }
 
-    public void spawnPlayer(Player player) {
-        entities.add(player);
+    public void spawnEntity(Entity entity) {
+        entities.add(entity);
     }
 
     public void spawnPlatform(Platform platform) {
