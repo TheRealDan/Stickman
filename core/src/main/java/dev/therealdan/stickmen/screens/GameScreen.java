@@ -13,9 +13,12 @@ import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.game.entities.weapons.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.weapons.Pistol;
+import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 import dev.therealdan.stickmen.main.StickmenApp;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameScreen extends BaseScreen {
 
@@ -91,6 +94,12 @@ public class GameScreen extends BaseScreen {
             Stickman stickman = new Stickman(position.cpy().add(0, newPlatform.getHeight() / 2f + 10));
             stickman.setEquipped(new Pistol(new Vector2()));
             getInstance().spawnEntity(stickman);
+        } else if (random.nextBoolean()) {
+            List<Platform> platforms = getInstance().getPlatforms().stream().filter(this::isOnScreen).collect(Collectors.toList());
+            Platform platform = platforms.get(random.nextInt(platforms.size()));
+            position = new Vector2(platform.getPosition().x, getY(0));
+            Weapon weapon = random.nextBoolean() ? new Pistol(position) : new AssaultRifle(position);
+            getInstance().spawnEntity(weapon);
         }
     }
 
@@ -103,9 +112,6 @@ public class GameScreen extends BaseScreen {
         switch (button) {
             case 0:
                 getInstance().spawnPlatform(new Platform(getMousePosition(), 500, 50, Color.BLUE));
-                break;
-            case 1:
-                getInstance().spawnEntity(random.nextBoolean() ? new Pistol(getMousePosition()) : new AssaultRifle(getMousePosition()));
                 break;
         }
         return false;
