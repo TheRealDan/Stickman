@@ -64,7 +64,7 @@ public class GameScreen extends BaseScreen {
         }
 
         if (position != null)
-            camera.position.lerp(new Vector3(position.x, position.y, camera.position.z), 0.5f);
+            camera.position.lerp(new Vector3(position.x, position.y, camera.position.z), 0.1f);
 
         for (Platform platform : getInstance().getPlatforms()) {
             platform.render(app);
