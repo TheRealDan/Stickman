@@ -24,6 +24,7 @@ public class GameScreen extends BaseScreen {
     public GameScreen(StickmenApp app) {
         super(app);
         instance = new GameInstance();
+        camera.zoom = 2;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class GameScreen extends BaseScreen {
             }
             if (zoomOut) {
                 camera.zoom += 0.01f * ((camera.zoom + 1) - camera.zoom);
-            } else if (zoomIn && camera.zoom > 1) {
+            } else if (zoomIn && camera.zoom > 2) {
                 camera.zoom += 0.002f * ((camera.zoom - 1) - camera.zoom);
             }
         }
