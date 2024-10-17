@@ -8,7 +8,6 @@ import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.game.entities.weapons.Bullet;
-import dev.therealdan.stickmen.game.entities.weapons.Pistol;
 import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class GameInstance {
                 }
             } else if (entity instanceof Player) {
                 Player player = (Player) entity;
-                player.getVelocity().set(player.getMovement().x * 600f * delta, player.getVelocity().y);
+                player.getVelocity().set(player.getMovement().x * 15f, player.getVelocity().y);
             }
 
             for (Platform platform : getPlatforms()) {
