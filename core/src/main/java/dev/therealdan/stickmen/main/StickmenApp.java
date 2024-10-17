@@ -23,6 +23,9 @@ public class StickmenApp extends Game {
         texture = new Texture("blank.png");
 
         setScreen(new GameScreen(this));
+
+        Gdx.app.getGraphics().setVSync(false);
+        Gdx.app.getGraphics().setForegroundFPS(-1);
     }
 
     @Override
