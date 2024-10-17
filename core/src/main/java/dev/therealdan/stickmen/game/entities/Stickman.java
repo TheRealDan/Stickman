@@ -45,6 +45,7 @@ public class Stickman extends Entity {
 
     public void shoot(GameInstance instance) {
         Weapon weapon = getEquipped();
+        if (weapon == null) return;
         if (System.currentTimeMillis() - weapon.getLastShot() < weapon.getReload()) return;
         weapon.setLastShot();
 

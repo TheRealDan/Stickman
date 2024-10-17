@@ -25,7 +25,6 @@ public class GameInstance {
 
     public GameInstance() {
         spawnPlatform(new Platform(new Vector2(0, -50), 1000, 50, Color.BLACK));
-        spawnEntity(new Stickman(new Vector2()));
     }
 
     public void tick(float delta) {
@@ -35,7 +34,6 @@ public class GameInstance {
 
             if (entity instanceof Stickman && !(entity instanceof Player)) {
                 Stickman stickman = (Stickman) entity;
-                if (stickman.getEquipped() == null) stickman.setEquipped(new Pistol(new Vector2()));
                 stickman.shoot(this);
             }
 

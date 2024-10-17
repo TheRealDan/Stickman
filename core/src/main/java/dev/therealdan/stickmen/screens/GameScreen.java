@@ -10,6 +10,7 @@ import dev.therealdan.stickmen.game.GameInstance;
 import dev.therealdan.stickmen.game.Platform;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
+import dev.therealdan.stickmen.game.entities.Stickman;
 import dev.therealdan.stickmen.game.entities.weapons.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.weapons.Pistol;
 import dev.therealdan.stickmen.main.StickmenApp;
@@ -85,6 +86,12 @@ public class GameScreen extends BaseScreen {
             if (platform.getPosition().dst(position) < Math.max(platform.getWidth(), platform.getHeight()) + Math.max(newPlatform.getWidth(), newPlatform.getHeight()))
                 return;
         getInstance().spawnPlatform(newPlatform);
+        if (random.nextBoolean()) return;
+        if (random.nextBoolean()) {
+            Stickman stickman = new Stickman(position.cpy().add(0, newPlatform.getHeight() / 2f + 10));
+            stickman.setEquipped(new Pistol(new Vector2()));
+            getInstance().spawnEntity(stickman);
+        }
     }
 
     public GameInstance getInstance() {
