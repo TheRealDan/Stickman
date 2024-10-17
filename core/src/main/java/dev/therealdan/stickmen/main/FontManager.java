@@ -50,7 +50,7 @@ public class FontManager implements Disposable {
     }
 
     public float getHeight(SpriteBatch batch, OrthographicCamera camera, String text, float fontSize) {
-        return getFont(fontSize, camera).draw(batch, text, Gdx.graphics.getWidth(), 0).height;
+        return getFont(fontSize, camera).draw(batch, text, Gdx.graphics.getWidth() * 1000, 0).height;
     }
 
     @Override
