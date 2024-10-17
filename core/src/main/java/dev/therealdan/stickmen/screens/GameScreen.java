@@ -63,8 +63,25 @@ public class GameScreen extends BaseScreen {
                     player.shoot(getInstance());
         }
 
-        if (position != null)
+        if (position != null) {
             camera.position.lerp(new Vector3(position.x, position.y, camera.position.z), 0.1f);
+
+            float minDistance = getPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2).dst(getPosition(Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() * 0.85f)));
+            float maxDistance = getPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2).dst(getPosition(Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() * 0.9f)));
+            boolean zoomIn = false;
+            boolean zoomOut = false;
+            for (Controller controller : Controllers.getControllers()) {
+                Player player = getInstance().getPlayer(controller);
+                if (player == null) continue;
+                if (player.getPosition().dst(position) > maxDistance) zoomOut = true;
+                if (player.getPosition().dst(position) < minDistance) zoomIn = true;
+            }
+            if (zoomOut) {
+                camera.zoom += 0.01f * ((camera.zoom + 1) - camera.zoom);
+            } else if (zoomIn && camera.zoom > 1) {
+                camera.zoom += 0.002f * ((camera.zoom - 1) - camera.zoom);
+            }
+        }
 
         for (Platform platform : getInstance().getPlatforms()) {
             platform.render(app);
