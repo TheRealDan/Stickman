@@ -94,7 +94,7 @@ public class GameScreen extends BaseScreen {
             Stickman stickman = new Stickman(position.cpy().add(0, newPlatform.getHeight() / 2f + 10));
             stickman.setEquipped(new Pistol(new Vector2()));
             getInstance().spawnEntity(stickman);
-        } else if (random.nextBoolean()) {
+        } else if (random.nextDouble() > 0.9) {
             List<Platform> platforms = getInstance().getPlatforms().stream().filter(this::isOnScreen).collect(Collectors.toList());
             Platform platform = platforms.get(random.nextInt(platforms.size()));
             position = new Vector2(platform.getPosition().x, getY(0));
