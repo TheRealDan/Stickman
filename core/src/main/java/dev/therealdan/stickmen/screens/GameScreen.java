@@ -11,6 +11,8 @@ import dev.therealdan.stickmen.game.Platform;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
+import dev.therealdan.stickmen.game.entities.powerups.Health;
+import dev.therealdan.stickmen.game.entities.powerups.Powerup;
 import dev.therealdan.stickmen.game.entities.weapons.AssaultRifle;
 import dev.therealdan.stickmen.game.entities.weapons.Pistol;
 import dev.therealdan.stickmen.game.entities.weapons.Weapon;
@@ -101,6 +103,9 @@ public class GameScreen extends BaseScreen {
             position = new Vector2(platform.getPosition().x, getY(0));
             Weapon weapon = random.nextBoolean() ? new Pistol(position) : new AssaultRifle(position);
             getInstance().spawnEntity(weapon);
+        } else if (random.nextBoolean()) {
+            Powerup powerup = new Health(position.cpy().add(0, newPlatform.getHeight() / 2f + 10));
+            getInstance().spawnEntity(powerup);
         }
     }
 

@@ -7,6 +7,7 @@ import dev.therealdan.stickmen.game.entities.Blood;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.game.entities.Player;
 import dev.therealdan.stickmen.game.entities.Stickman;
+import dev.therealdan.stickmen.game.entities.powerups.Powerup;
 import dev.therealdan.stickmen.game.entities.weapons.Bullet;
 import dev.therealdan.stickmen.game.entities.weapons.Weapon;
 
@@ -96,6 +97,12 @@ public class GameInstance {
                             stickman.setEquipped((Weapon) each);
                             entities.remove(each);
                         }
+                    } else if (each instanceof Powerup) {
+                        Powerup powerup = (Powerup) each;
+                        if (stickman.contains(powerup.getPosition())) {
+                            powerup.collect(stickman);
+                            entities.remove(powerup);
+                        }
                     } else if (each instanceof Bullet) {
                         Bullet bullet = (Bullet) each;
                         if (!bullet.getOwner().equals(entity) && stickman.contains(bullet.getPosition())) {
@@ -117,6 +124,10 @@ public class GameInstance {
 
     public void spawnPlatform(Platform platform) {
         platforms.add(platform);
+    }
+
+    public void remove(Entity entity) {
+        entities.remove(entity);
     }
 
     public void remove(Platform platform) {
