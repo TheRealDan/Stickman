@@ -81,7 +81,7 @@ public class GameScreen extends BaseScreen {
 
     public void generate() {
         Vector2 position = random.nextBoolean() ? getPosition(random.nextBoolean() ? -random.nextInt(Gdx.graphics.getWidth()) : Gdx.graphics.getWidth() + random.nextInt(Gdx.graphics.getWidth()), -Gdx.graphics.getHeight() + random.nextInt(Gdx.graphics.getHeight() * 3)) : getPosition(-Gdx.graphics.getWidth() + random.nextInt(Gdx.graphics.getWidth() * 3), random.nextBoolean() ? -random.nextInt(Gdx.graphics.getHeight()) : Gdx.graphics.getHeight() + random.nextInt(Gdx.graphics.getHeight()));
-        Platform newPlatform = new Platform(position, 500, 50, Color.DARK_GRAY);
+        Platform newPlatform = new Platform(position, 500, 50, Color.BLACK);
         for (Platform platform : getInstance().getPlatforms())
             if (platform.getPosition().dst(position) < Math.max(platform.getWidth(), platform.getHeight()) + Math.max(newPlatform.getWidth(), newPlatform.getHeight()))
                 return;

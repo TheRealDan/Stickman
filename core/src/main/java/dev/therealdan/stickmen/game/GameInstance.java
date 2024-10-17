@@ -24,7 +24,7 @@ public class GameInstance {
     private HashSet<Platform> platforms = new HashSet<>();
 
     public GameInstance() {
-        spawnPlatform(new Platform(new Vector2(0, -50), 1000, 50, Color.BLACK));
+        spawnPlatform(new Platform(new Vector2(0, -50), 500, 50, Color.BLACK));
     }
 
     public void tick(float delta) {
