@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -14,6 +15,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.therealdan.stickmen.game.Platform;
 import dev.therealdan.stickmen.game.entities.Entity;
 import dev.therealdan.stickmen.main.StickmenApp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseScreen implements Screen, InputProcessor, ControllerListener {
 
@@ -38,6 +42,15 @@ public abstract class BaseScreen implements Screen, InputProcessor, ControllerLi
     public void render(float v) {
         camera.update();
         app.batch.setProjectionMatrix(camera.combined);
+
+        List<String> info = new ArrayList<>();
+        info.add(Gdx.graphics.getFramesPerSecond() + " FPS");
+
+        float y = 20;
+        for (String line : info) {
+            app.font.draw(app.batch, camera, line, getX(20), getY(y), 12, Color.BLACK);
+            y += app.font.getHeight(app.batch, camera, line, 12);
+        }
     }
 
     @Override
