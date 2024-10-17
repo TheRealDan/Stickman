@@ -54,13 +54,7 @@ public class GameScreen extends BaseScreen {
                 position.add(player.getPosition()).scl(0.5f);
             }
 
-            if (player.canJump())
-                if (controller.getButton(9) || controller.getButton(0))
-                    player.jump();
-
-            if (player.getEquipped() != null)
-                if (controller.getAxis(5) > 0.2f)
-                    player.shoot(getInstance());
+            player.controls(controller, getInstance());
         }
 
         if (position != null) {

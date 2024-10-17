@@ -2,6 +2,7 @@ package dev.therealdan.stickmen.game.entities;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.math.Vector2;
+import dev.therealdan.stickmen.game.GameInstance;
 
 public class Player extends Stickman {
 
@@ -13,6 +14,16 @@ public class Player extends Stickman {
     public Player(Controller controller, Vector2 position) {
         super(position);
         index = controller.getPlayerIndex();
+    }
+
+    public void controls(Controller controller, GameInstance instance) {
+        if (canJump())
+            if (controller.getButton(9) || controller.getButton(0))
+                jump();
+
+        if (getEquipped() != null)
+            if (controller.getAxis(5) > 0.2f)
+                shoot(instance);
     }
 
     public void jump() {
