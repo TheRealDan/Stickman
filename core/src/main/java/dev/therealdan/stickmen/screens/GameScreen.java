@@ -1,7 +1,6 @@
 package dev.therealdan.stickmen.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
@@ -31,21 +30,29 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
 
+        Vector2 position = random.nextBoolean() ? getPosition(random.nextBoolean() ? -random.nextInt(Gdx.graphics.getWidth()) : Gdx.graphics.getWidth() + random.nextInt(Gdx.graphics.getWidth()), -Gdx.graphics.getHeight() + random.nextInt(Gdx.graphics.getHeight() * 3)) : getPosition(-Gdx.graphics.getWidth() + random.nextInt(Gdx.graphics.getWidth() * 3), random.nextBoolean() ? -random.nextInt(Gdx.graphics.getHeight()) : Gdx.graphics.getHeight() + random.nextInt(Gdx.graphics.getHeight()));
+        Platform newPlatform = new Platform(position, 500, 50, Color.DARK_GRAY);
+        boolean safe = true;
+        for (Platform platform : getInstance().getPlatforms()) {
+            if (platform.getPosition().dst(position) < Math.max(platform.getWidth(), platform.getHeight()) + Math.max(newPlatform.getWidth(), newPlatform.getHeight())) {
+                safe = false;
+                break;
+            }
+        }
+        if (safe) getInstance().spawnPlatform(newPlatform);
+
         getInstance().tick(delta);
 
-        float speed = 500 * camera.zoom;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || (Gdx.input.isKeyPressed(Input.Keys.W)))
-            camera.position.add(new Vector3(0, speed * delta, 0));
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || (Gdx.input.isKeyPressed(Input.Keys.S)))
-            camera.position.add(new Vector3(0, -speed * delta, 0));
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || (Gdx.input.isKeyPressed(Input.Keys.A)))
-            camera.position.add(new Vector3(-speed * delta, 0, 0));
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || (Gdx.input.isKeyPressed(Input.Keys.D)))
-            camera.position.add(new Vector3(speed * delta, 0, 0));
-
+        position = null;
         for (Controller controller : Controllers.getControllers()) {
             Player player = getInstance().getPlayer(controller);
             if (player == null) continue;
+
+            if (position == null) {
+                position = player.getPosition().cpy();
+            } else {
+                position.add(player.getPosition()).scl(0.5f);
+            }
 
             if (player.canJump())
                 if (controller.getButton(9) || controller.getButton(0))
@@ -56,15 +63,15 @@ public class GameScreen extends BaseScreen {
                     player.shoot(getInstance());
         }
 
+        if (position != null)
+            camera.position.lerp(new Vector3(position.x, position.y, camera.position.z), 0.5f);
+
         for (Platform platform : getInstance().getPlatforms()) {
             platform.render(app);
         }
 
         for (Entity entity : getInstance().getEntities()) {
             entity.render(app);
-
-            if (entity instanceof Player && !isOnScreen(entity))
-                entity.getPosition().set(camera.position.x, camera.position.y);
         }
     }
 
