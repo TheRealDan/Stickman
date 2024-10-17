@@ -119,6 +119,10 @@ public class GameInstance {
         platforms.add(platform);
     }
 
+    public void remove(Platform platform) {
+        platforms.remove(platform);
+    }
+
     public Player getPlayer(Controller controller) {
         for (Entity entity : getEntities())
             if (entity instanceof Player)

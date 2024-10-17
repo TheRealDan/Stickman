@@ -36,6 +36,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
 
         generate();
+        cull();
 
         getInstance().tick(delta);
 
@@ -100,6 +101,23 @@ public class GameScreen extends BaseScreen {
             position = new Vector2(platform.getPosition().x, getY(0));
             Weapon weapon = random.nextBoolean() ? new Pistol(position) : new AssaultRifle(position);
             getInstance().spawnEntity(weapon);
+        }
+    }
+
+    public void cull() {
+        if (getInstance().getPlatforms().size() > 100) {
+            double maxDistance = 0;
+            Platform furthest = null;
+            for (Platform platform : getInstance().getPlatforms()) {
+                double distance = platform.getPosition().dst(getPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                    furthest = platform;
+                }
+            }
+            if (furthest != null) {
+                getInstance().remove(furthest);
+            }
         }
     }
 
