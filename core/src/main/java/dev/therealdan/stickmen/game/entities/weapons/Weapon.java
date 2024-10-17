@@ -1,9 +1,9 @@
 package dev.therealdan.stickmen.game.entities.weapons;
 
 import com.badlogic.gdx.math.Vector2;
-import dev.therealdan.stickmen.game.entities.Entity;
+import dev.therealdan.stickmen.game.entities.Pickup;
 
-public abstract class Weapon extends Entity {
+public abstract class Weapon extends Pickup {
 
     private long lastShot = System.currentTimeMillis();
 
