@@ -2,7 +2,6 @@ package dev.therealdan.stickmen.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -43,17 +42,16 @@ public class GameScreen extends BaseScreen {
         getInstance().tick(delta);
 
         Vector2 position = null;
-        for (Controller controller : Controllers.getControllers()) {
-            Player player = getInstance().getPlayer(controller);
-            if (player == null) continue;
-
+        for (Player player : getInstance().getPlayers()) {
             if (position == null) {
                 position = player.getPosition().cpy();
             } else {
                 position.add(player.getPosition()).scl(0.5f);
             }
 
-            player.controls(controller, getInstance());
+            player.controls(player.getController(), getInstance());
+
+            if (player.getController() == null) player.aimAt(getMousePosition());
         }
 
         if (position != null) {
@@ -63,8 +61,7 @@ public class GameScreen extends BaseScreen {
             float maxDistance = getPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2).dst(getPosition(Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() * 0.9f)));
             boolean zoomIn = false;
             boolean zoomOut = false;
-            for (Controller controller : Controllers.getControllers()) {
-                Player player = getInstance().getPlayer(controller);
+            for (Player player : getInstance().getPlayers()) {
                 if (player == null) continue;
                 if (player.getPosition().dst(position) > maxDistance) zoomOut = true;
                 if (player.getPosition().dst(position) < minDistance) zoomIn = true;
@@ -134,8 +131,24 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (button) {
             case 0:
+                Player player = getInstance().getPlayerKeyboard();
+                if (player != null) {
+
+                }
+                break;
+            case 1:
                 getInstance().spawnPlatform(new Platform(getMousePosition(), 500, 50, Color.BLUE));
                 break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        Player player = getInstance().getPlayerKeyboard();
+        if (player == null) {
+            player = new Player(-1, new Vector2(camera.position.x, camera.position.y));
+            getInstance().spawnEntity(player);
         }
         return false;
     }

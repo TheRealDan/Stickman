@@ -1,6 +1,9 @@
 package dev.therealdan.stickmen.game.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.stickmen.game.GameInstance;
 
@@ -12,18 +15,29 @@ public class Player extends Stickman {
     private boolean canJump = true;
 
     public Player(Controller controller, Vector2 position) {
+        this(controller.getPlayerIndex(), position);
+    }
+
+    public Player(int index, Vector2 position) {
         super(position);
-        index = controller.getPlayerIndex();
+        this.index = index;
     }
 
     public void controls(Controller controller, GameInstance instance) {
         if (canJump())
-            if (controller.getButton(9) || controller.getButton(0))
+            if ((controller == null && (Gdx.input.isKeyPressed(Input.Keys.SPACE))) || (controller != null && (controller.getButton(9) || controller.getButton(0))))
                 jump();
 
         if (getEquipped() != null)
-            if (controller.getAxis(5) > 0.2f)
+            if ((controller == null && (Gdx.input.isButtonPressed(Input.Buttons.LEFT))) || (controller != null && (controller.getAxis(5) > 0.2f)))
                 shoot(instance);
+
+        if (controller == null) {
+            float x = 0;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) x -= 1;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) x += 1;
+            getMovement().set(x, 0);
+        }
     }
 
     public void jump() {
@@ -49,6 +63,13 @@ public class Player extends Stickman {
                     getDirection().set(v, getDirection().y);
                 break;
         }
+    }
+
+    public Controller getController() {
+        for (Controller controller : Controllers.getControllers())
+            if (controller.getPlayerIndex() == getIndex())
+                return controller;
+        return null;
     }
 
     public int getIndex() {

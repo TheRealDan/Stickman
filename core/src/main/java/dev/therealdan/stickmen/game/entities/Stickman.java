@@ -32,7 +32,7 @@ public class Stickman extends Entity {
         if (getEquipped() != null) {
             Weapon weapon = getEquipped();
             app.batch.setColor(Color.BLACK);
-            app.batch.draw(new TextureRegion(weapon.getTexture()), getPosition().x - weapon.getWidth() / 2f + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y - weapon.getHeight() / 2f + getHeight() / 2f, weapon.getWidth() / 2f, weapon.getHeight() / 2f, weapon.getWidth(), weapon.getHeight(), 1, getDirection().y > 0 ? -1 : 1, (float) (Math.atan2(getDirection().y, getDirection().x) * 180 / Math.PI + 450));
+            app.batch.draw(new TextureRegion(weapon.getTexture()), getPosition().x - weapon.getWidth() / 2f + (getDirection().x > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y - weapon.getHeight() / 2f + getHeight() / 2f, weapon.getWidth() / 2f, weapon.getHeight() / 2f, weapon.getWidth(), weapon.getHeight(), 1, getDirection().x > 0 ? -1 : 1, (float) (Math.atan2(getDirection().y, getDirection().x) * 180 / Math.PI + 450) + 90);
         }
 
         if (getHealth() < getMaxHealth()) {
@@ -43,14 +43,33 @@ public class Stickman extends Entity {
         }
     }
 
+    public void ai(GameInstance instance) {
+        Player closestPlayer = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Player player : instance.getPlayers()) {
+            double distance = player.getPosition().dst(player.getPosition());
+            if (closestPlayer == null || distance < closestDistance) {
+                closestPlayer = player;
+                closestDistance = distance;
+            }
+        }
+        if (closestPlayer == null) return;
+        aimAt(closestPlayer.getPosition());
+        shoot(instance);
+    }
+
+    public void aimAt(Vector2 position) {
+        getDirection().set(position.cpy().sub(getPosition()));
+    }
+
     public void shoot(GameInstance instance) {
         Weapon weapon = getEquipped();
         if (weapon == null) return;
         if (System.currentTimeMillis() - weapon.getLastShot() < weapon.getReload()) return;
         weapon.setLastShot();
 
-        Bullet bullet = new Bullet(this, new Vector2(getPosition().x + (getDirection().y > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
-        bullet.getVelocity().set(getDirection().y, -getDirection().x).nor().scl(25);
+        Bullet bullet = new Bullet(this, new Vector2(getPosition().x + (getDirection().x > 0 ? getWidth() / 2f : -getWidth() / 2f), getPosition().y + getHeight() / 2f));
+        bullet.getVelocity().set(getDirection().cpy().nor().scl(25));
         instance.spawnEntity(bullet);
     }
 

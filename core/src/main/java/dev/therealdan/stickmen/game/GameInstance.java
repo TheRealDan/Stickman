@@ -34,7 +34,7 @@ public class GameInstance {
 
             if (entity instanceof Stickman && !(entity instanceof Player)) {
                 Stickman stickman = (Stickman) entity;
-                stickman.shoot(this);
+                stickman.ai(this);
             }
 
             if (entity instanceof Blood) {
@@ -134,12 +134,28 @@ public class GameInstance {
         platforms.remove(platform);
     }
 
+    public Player getPlayerKeyboard() {
+        for (Entity entity : getEntities())
+            if (entity instanceof Player)
+                if (((Player) entity).getIndex() == -1)
+                    return (Player) entity;
+        return null;
+    }
+
     public Player getPlayer(Controller controller) {
         for (Entity entity : getEntities())
             if (entity instanceof Player)
                 if (controller.getPlayerIndex() == ((Player) entity).getIndex())
                     return (Player) entity;
         return null;
+    }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        for (Entity entity : getEntities())
+            if (entity instanceof Player)
+                players.add((Player) entity);
+        return players;
     }
 
     public List<Entity> getEntities() {
